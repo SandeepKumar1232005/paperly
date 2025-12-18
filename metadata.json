@@ -1,0 +1,7 @@
+{
+  "name": "Paperly ",
+  "description": "A comprehensive platform connecting students with professional academic writers, featuring progress tracking, secure submissions, and AI-powered quality assistance.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
