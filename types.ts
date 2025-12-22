@@ -11,7 +11,7 @@ export enum AssignmentStatus {
 }
 
 export interface User {
-  id: string;
+  id:string;
   name: string;
   email: string;
   role: UserRole;
