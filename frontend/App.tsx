@@ -148,13 +148,14 @@ const AppContent: React.FC = () => {
     addNotification(`Welcome back, ${user.name}!`);
   };
 
-  const handleRegisterSubmit = async (name: string, email: string, password: string, role: UserRole): Promise<void> => {
+  const handleRegisterSubmit = async (name: string, email: string, username: string, password: string, role: UserRole): Promise<void> => {
     setIsSyncing(true);
     try {
       const newUser: User & { password?: string } = {
         id: `user-${Date.now()}`,
         name,
         email,
+        username,
         role,
         password, // Pass to API
         avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`

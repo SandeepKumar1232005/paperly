@@ -1,0 +1,12 @@
+.idea/
+*__pycache__*
+*egg-info/
+
+docs/.sass-cache/*
+docs/_site/*
+
+Gemfile.lock
+
+/docs/.jekyll-metadata
+/docs/djongocs/assets/*
+*.map

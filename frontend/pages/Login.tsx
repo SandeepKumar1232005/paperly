@@ -68,6 +68,7 @@ const Login: React.FC<LoginProps> = ({ onLogin, onSocialLoginSuccess, onNavigate
             <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Sign in to Paperly</p>
           </div>
 
+{/* 
           <div className="space-y-3 mb-6">
             <button
               onClick={() => loginWithGoogle()}
@@ -91,7 +92,8 @@ const Login: React.FC<LoginProps> = ({ onLogin, onSocialLoginSuccess, onNavigate
             <div className="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div>
             <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Or continue with email</span>
             <div className="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div>
-          </div>
+          </div> 
+          */}
 
           <form onSubmit={handleStandardSubmit} className="space-y-5">
             {error && <div className="bg-red-50 text-red-600 p-3 rounded-xl text-xs font-medium border border-red-100">{error}</div>}

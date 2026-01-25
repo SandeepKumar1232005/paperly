@@ -10,7 +10,7 @@ class Dispute(models.Model):
     )
 
     assignment = models.OneToOneField('assignments.Assignment', on_delete=models.CASCADE, related_name='dispute')
-    raiser = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='raised_disputes')
+    raiser = models.CharField(max_length=255) # models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='raised_disputes')
     reason = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='OPEN')
     resolution_notes = models.TextField(blank=True, default='')
@@ -27,7 +27,7 @@ class SupportTicket(models.Model):
         ('RESOLVED', 'Resolved'),
         ('CLOSED', 'Closed'),
     )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='support_tickets')
+    user = models.CharField(max_length=255) # models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='support_tickets')
     subject = models.CharField(max_length=255)
     message = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='OPEN')

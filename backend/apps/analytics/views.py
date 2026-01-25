@@ -1,25 +1,24 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
-from django.contrib.auth import get_user_model
-from apps.assignments.models import Assignment
-
-User = get_user_model()
+from utils.mongo import db
 
 class DashboardStatsView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        total_students = User.objects.filter(is_superuser=False).count() # Rough approx
-        total_writers = User.objects.filter(groups__name='Provider').count()
-        if total_writers == 0:
-             total_writers = User.objects.filter(pk__in=[]).count() # Placeholder logic
-
-        active_assignments = Assignment.objects.exclude(status='COMPLETED').count()
-        total_revenue = 125000 # Mock since we don't have transaction model fully migrated in this context yet
+        if db:
+            total_users = db.users.count_documents({})
+            # active_assignments = db.assignments.count_documents({'status': {'$ne': 'COMPLETED'}})
+            active_assignments = 0 # Placeholder until assignments are migrated
+        else:
+            total_users = 0
+            active_assignments = 0
+        
+        total_revenue = 125000 
 
         return Response({
-            "total_users": User.objects.count(),
+            "total_users": total_users,
             "active_assignments": active_assignments,
             "total_revenue": total_revenue,
             "system_health": "99.9%"

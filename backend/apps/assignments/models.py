@@ -30,8 +30,8 @@ class Assignment(models.Model):
     quoted_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     writer_comment = models.TextField(null=True, blank=True)
     
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_assignments')
-    provider = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_jobs')
+    student = models.CharField(max_length=255) # models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_assignments')
+    provider = models.CharField(max_length=255, null=True, blank=True) # models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_jobs')
     
     files = models.JSONField(default=list, blank=True)
     attachment = models.FileField(upload_to='assignments/attachments/', null=True, blank=True)

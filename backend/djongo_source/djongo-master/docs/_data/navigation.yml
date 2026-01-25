@@ -1,0 +1,71 @@
+# main links
+main:
+  - title: "Login"
+    url: /djongocs/login/
+    id: 'nav-create-account'
+  - title: "Contact Us"
+    url: /djongocs/contact-us/
+    id: 'nav-contact-us'
+  - title: "Services"
+    url: /app-development/
+  - title: "Products"
+    url: /products/
+    id: 'nav-login'
+  - title: "Docs"
+    url: /docs/get-started/
+    id: 'nav-docs'
+
+#  - title: "Source"
+#    url: https://github.com/doableware/djongo
+
+docs:
+  - title: "Djongo"
+    children:
+    - title: "Get Started"
+      url: /get-started/
+    - title: "Django with MongoDB"
+      url: /integrating-django-with-mongodb/
+    - title: "Embedded Field"
+      url: /using-django-with-mongodb-data-fields/
+    - title: "Array Field"
+      url: /using-django-with-mongodb-array-field/
+    - title: "Array Reference Field"
+      url: /using-django-with-mongodb-array-reference-field/
+    - title: "Other Fields"
+      url: /using-django-with-other-fields/
+
+  - title: "DjongoCS"
+    children:
+    - title: "Indexes"
+      url: /indexes/
+    - title: "Model Query"
+      url: /model-query/
+    - title: "Model Creation"
+      url: /model-creation/
+    - title: "Model Update"
+      url: /model-update/
+    - title: "Database Transactions"
+      url: /database-transactions/
+#    - title: "Aggregation"
+#      url: /djongonxt-aggregation/
+#    - title: "Contact"
+#      url: /djongonxt-more-info/
+
+  - title: "Side Stuff"
+    children:
+    - title: "Djongo vs Others"
+      url: /djongo-comparison/
+    - title: "Djongo Design"
+      url: /django-mongodb-connector-design-document/
+#      - title: "Roadmap"
+#        url: /roadmap/
+
+#  - title: "Donate"
+#    url: /donate/
+#    thumbnail: /assets/images/heart.png
+
+server:
+  - title: "Info"
+    url: /djongocs/
+  - title: "Control"
+    url: /djongocs/control

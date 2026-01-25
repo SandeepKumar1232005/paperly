@@ -136,17 +136,15 @@ export const api = {
     // 1. Register with Backend
     try {
       // dj-rest-auth registration endpoint
-      const response = await fetch('http://localhost:8000/api/auth/registration/', {
+      const response = await fetch('http://localhost:8000/api/auth/register/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username: user.email, // Use email as username
+          username: user.username,
           email: user.email,
-          password1: user.password,
-          password: user.password, // Some endpoints expect password/password1
-          first_name: user.name.split(' ')[0],
-          last_name: user.name.split(' ').slice(1).join(' '),
-          // role: user.role // Custom field, might need handling in backend serializer or separate update
+          password: user.password,
+          name: user.name,
+          role: user.role
         })
       });
 
@@ -288,7 +286,7 @@ export const api = {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Token ${localStorage.getItem('auth_token')}`
+          'Authorization': `Token ${localStorage.getItem('auth_token')} `
         },
         body: JSON.stringify(updates)
       });
@@ -351,13 +349,13 @@ export const api = {
       let url = 'http://localhost:8000/api/users/';
       if (role && role !== 'ALL') {
         const backendRole = role === 'WRITER' ? 'provider' : role.toLowerCase();
-        url += `?role=${backendRole}`;
+        url += `? role = ${backendRole} `;
       }
 
       const token = localStorage.getItem('auth_token');
       const response = await fetch(url, {
         headers: {
-          'Authorization': token ? `Bearer ${token}` : ''
+          'Authorization': token ? `Bearer ${token} ` : ''
         }
       });
 
@@ -389,10 +387,10 @@ export const api = {
   async deleteUser(userId: string): Promise<void> {
     try {
       const token = localStorage.getItem('auth_token');
-      await fetch(`http://localhost:8000/api/users/${userId}/`, {
+      await fetch(`http://localhost:8000/api/users/${userId} / `, {
         method: 'DELETE',
         headers: {
-          'Authorization': token ? `Bearer ${token}` : ''
+          'Authorization': token ? `Bearer ${token} ` : ''
         }
       });
     } catch (e) { console.warn("Backend delete user failed"); }
@@ -420,7 +418,7 @@ export const api = {
       const token = localStorage.getItem('auth_token');
       const response = await fetch('http://localhost:8000/api/users/?role=provider', {
         headers: {
-          'Authorization': token ? `Bearer ${token}` : ''
+          'Authorization': token ? `Bearer ${token} ` : ''
         }
       });
       if (response.ok) {

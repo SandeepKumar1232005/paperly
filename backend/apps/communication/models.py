@@ -2,10 +2,10 @@ from django.db import models
 from django.conf import settings
 
 class Message(models.Model):
-    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_messages')
-    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_messages', null=True, blank=True)
-    assignment = models.ForeignKey('assignments.Assignment', on_delete=models.CASCADE, related_name='messages', null=True, blank=True)
+    sender = models.CharField(max_length=255) 
+    recipient = models.CharField(max_length=255, null=True, blank=True)
     
+    assignment = models.ForeignKey('assignments.Assignment', on_delete=models.CASCADE, related_name='messages', null=True, blank=True)
     content = models.TextField(blank=True, default='')
     file = models.FileField(upload_to='chat_uploads/', null=True, blank=True)
     
@@ -24,7 +24,9 @@ class Announcement(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     target_audience = models.CharField(max_length=20, choices=AUDIENCE_CHOICES, default='ALL')
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    
+    created_by = models.CharField(max_length=255, null=True) # Fixed ForeignKey
+    
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 

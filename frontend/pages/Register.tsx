@@ -6,13 +6,14 @@ import Logo from '../components/Logo';
 import { api } from '../services/api';
 
 interface RegisterProps {
-  onRegister: (name: string, email: string, password: string, role: UserRole) => Promise<void>;
+  onRegister: (name: string, email: string, username: string, password: string, role: UserRole) => Promise<void>;
   onSocialLoginSuccess?: (user: User) => Promise<void>;
   onNavigate: (view: 'LANDING' | 'LOGIN') => void;
 }
 
 const Register: React.FC<RegisterProps> = ({ onRegister, onSocialLoginSuccess, onNavigate }) => {
   const [name, setName] = useState('');
+  const [username, setUsername] = useState(''); // New state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -55,7 +56,7 @@ const Register: React.FC<RegisterProps> = ({ onRegister, onSocialLoginSuccess, o
 
     setIsLoading('email');
     try {
-      await onRegister(name, email, password, role);
+      await onRegister(name, email, username, password, role);
     } catch (e: any) {
       setError(e.message || "Registration failed");
       setIsLoading(null);
@@ -74,6 +75,7 @@ const Register: React.FC<RegisterProps> = ({ onRegister, onSocialLoginSuccess, o
             <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Select your account type to get started</p>
           </div>
 
+          {/* 
           <div className="space-y-3 mb-6">
             <button
               onClick={() => loginWithGoogle()}
@@ -97,7 +99,8 @@ const Register: React.FC<RegisterProps> = ({ onRegister, onSocialLoginSuccess, o
             <div className="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div>
             <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Or register with email</span>
             <div className="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div>
-          </div>
+          </div> 
+          */}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && <div className="bg-red-50 text-red-600 p-3 rounded-xl text-xs font-medium border border-red-100">{error}</div>}
@@ -139,6 +142,17 @@ const Register: React.FC<RegisterProps> = ({ onRegister, onSocialLoginSuccess, o
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors"
                 placeholder="john@example.com"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Username</label>
+              <input
+                type="text"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors"
+                placeholder="sandeep123"
               />
             </div>
             <div>

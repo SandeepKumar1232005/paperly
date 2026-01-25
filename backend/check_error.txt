@@ -1,0 +1,351 @@
+﻿Connected to MongoDB: paperly_db
+python : Traceback 
+(most recent call 
+last):
+At line:1 char:1
++ python manage.py 
+check 2>&1 | 
+Out-File -Encoding 
+utf8 check_error.txt
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Traceba   
+ ck (most recent     
+call last)::Stri    
+ng) [], RemoteEx    
+ception
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+  File "F:\Downloads\
+PAPERLY\backend\manag
+e.py", line 22, in 
+<module>
+    main()
+  File "F:\Downloads\
+PAPERLY\backend\manag
+e.py", line 18, in 
+main
+    execute_from_comm
+and_line(sys.argv)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\core\management\_
+_init__.py", line 
+442, in execute_from_
+command_line
+    utility.execute()
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\core\management\_
+_init__.py", line 
+436, in execute
+    self.fetch_comman
+d(subcommand).run_fro
+m_argv(self.argv)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\core\management\b
+ase.py", line 420, 
+in run_from_argv
+    
+self.execute(*args, 
+**cmd_options)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\core\management\b
+ase.py", line 464, 
+in execute
+    output = 
+self.handle(*args, 
+**options)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\core\management\c
+ommands\check.py", 
+line 81, in handle
+    self.check(
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\core\management\b
+ase.py", line 496, 
+in check
+    all_issues = 
+checks.run_checks(
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\core\checks\regis
+try.py", line 89, in 
+run_checks
+    new_errors = chec
+k(app_configs=app_con
+figs, 
+databases=databases)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\core\checks\urls.
+py", line 44, in chec
+k_url_namespaces_uniq
+ue
+    all_namespaces = 
+_load_all_namespaces(
+resolver)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\core\checks\urls.
+py", line 63, in 
+_load_all_namespaces
+    url_patterns = 
+getattr(resolver, 
+"url_patterns", [])
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\utils\functional.
+py", line 47, in 
+__get__
+    res = instance.__
+dict__[self.name] = 
+self.func(instance)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\urls\resolvers.py
+", line 718, in 
+url_patterns
+    patterns = getatt
+r(self.urlconf_module
+, "urlpatterns", 
+self.urlconf_module)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\utils\functional.
+py", line 47, in 
+__get__
+    res = instance.__
+dict__[self.name] = 
+self.func(instance)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\urls\resolvers.py
+", line 711, in 
+urlconf_module
+    return import_mod
+ule(self.urlconf_name
+)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\importlib\__init_
+_.py", line 126, in 
+import_module
+    return _bootstrap
+._gcd_import(name[lev
+el:], package, level)
+  File "<frozen impor
+tlib._bootstrap>", 
+line 1050, in 
+_gcd_import
+  File "<frozen impor
+tlib._bootstrap>", 
+line 1027, in 
+_find_and_load
+  File "<frozen impor
+tlib._bootstrap>", 
+line 1006, in _find_a
+nd_load_unlocked
+  File "<frozen impor
+tlib._bootstrap>", 
+line 688, in 
+_load_unlocked
+  File "<frozen impor
+tlib._bootstrap_exter
+nal>", line 883, in 
+exec_module
+  File "<frozen impor
+tlib._bootstrap>", 
+line 241, in _call_wi
+th_frames_removed
+  File "F:\Downloads\
+PAPERLY\backend\paper
+ly_project\urls.py", 
+line 11, in <module>
+    path('api/communi
+cation/', include('ap
+ps.communication.urls
+')),
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\urls\conf.py", 
+line 39, in include
+    urlconf_module = 
+import_module(urlconf
+_module)
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\importlib\__init_
+_.py", line 126, in 
+import_module
+    return _bootstrap
+._gcd_import(name[lev
+el:], package, level)
+  File "<frozen impor
+tlib._bootstrap>", 
+line 1050, in 
+_gcd_import
+  File "<frozen impor
+tlib._bootstrap>", 
+line 1027, in 
+_find_and_load
+  File "<frozen impor
+tlib._bootstrap>", 
+line 1006, in _find_a
+nd_load_unlocked
+  File "<frozen impor
+tlib._bootstrap>", 
+line 688, in 
+_load_unlocked
+  File "<frozen impor
+tlib._bootstrap_exter
+nal>", line 883, in 
+exec_module
+  File "<frozen impor
+tlib._bootstrap>", 
+line 241, in _call_wi
+th_frames_removed
+  File "F:\Downloads\
+PAPERLY\backend\apps\
+communication\urls.py
+", line 3, in 
+<module>
+    from .views 
+import 
+MessageViewSet, 
+AnnouncementViewSet
+  File "F:\Downloads\
+PAPERLY\backend\apps\
+communication\views.p
+y", line 5, in 
+<module>
+    from 
+.serializers import 
+MessageSerializer, An
+nouncementSerializer
+  File "F:\Downloads\
+PAPERLY\backend\apps\
+communication\seriali
+zers.py", line 3, in 
+<module>
+    from apps.authent
+ication.serializers 
+import UserSerializer
+  File "F:\Downloads\
+PAPERLY\backend\apps\
+authentication\serial
+izers.py", line 1, 
+in <module>
+    from dj_rest_auth
+.registration.seriali
+zers import 
+RegisterSerializer 
+as DefaultRegisterSer
+ializer
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dj_
+rest_auth\registratio
+n\serializers.py", 
+line 1, in <module>
+    from allauth.soci
+alaccount.providers.o
+auth2.client import 
+OAuth2Error
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\all
+auth\socialaccount\pr
+oviders\oauth2\client
+.py", line 7, in 
+<module>
+    from allauth.soci
+alaccount.adapter 
+import get_adapter
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\all
+auth\socialaccount\ad
+apter.py", line 10, 
+in <module>
+    from allauth.acco
+unt.adapter import 
+get_adapter as 
+get_account_adapter
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\all
+auth\account\adapter.
+py", line 19, in 
+<module>
+    from django.contr
+ib.auth.models 
+import AbstractUser
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\contrib\auth\mode
+ls.py", line 39, in 
+<module>
+    class Permission(
+models.Model):
+  File "C:\Users\ADMI
+N\AppData\Local\Progr
+ams\Python\Python310\
+lib\site-packages\dja
+ngo\db\models\base.py
+", line 136, in 
+__new__
+    raise 
+RuntimeError(
+RuntimeError: Model 
+class django.contrib.
+auth.models.Permissio
+n doesn't declare an 
+explicit app_label 
+and isn't in an 
+application in 
+INSTALLED_APPS.
