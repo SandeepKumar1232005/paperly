@@ -17,41 +17,53 @@ class RegisterView(APIView):
     permission_classes = []
 
     def post(self, request):
-        data = request.data
-        email = data.get('email')
-        password = data.get('password')
-        name = data.get('name')
-        username = data.get('username') # New field
-        role = data.get('role', 'STUDENT')
+        try:
+            data = request.data
+            email = data.get('email')
+            password = data.get('password')
+            name = data.get('name')
+            username = data.get('username') # New field
+            role = data.get('role', 'STUDENT')
 
-        if not email or not password or not username:
-            return Response({'error': 'Email, password, and username required'}, status=status.HTTP_400_BAD_REQUEST)
+            print(f"Register attempt: {email}, {username}")
 
-        # Check if user exists (email OR username)
-        if db.users.find_one({'$or': [{'email': email}, {'username': username}]}):
-            existing_user = db.users.find_one({'$or': [{'email': email}, {'username': username}]})
-            if existing_user.get('username') == username:
-                 return Response({'error': 'Username already taken'}, status=status.HTTP_400_BAD_REQUEST)
-            return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+            if not email or not password or not username:
+                return Response({'error': 'Email, password, and username required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Hash password
-        hashed_password = pbkdf2_sha256.hash(password)
+            # Check if user exists (email OR username)
+            if db is None:
+                print("CRITICAL: MongoDB not connected")
+                return Response({'error': 'Database error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        user_id = str(uuid.uuid4())
-        new_user = {
-            'id': user_id,
-            'email': email,
-            'username': username, # Store username
-            'password': hashed_password, # Store hash!
-            'name': name,
-            'role': role,
-            'created_at': datetime.datetime.utcnow()
-        }
+            if db.users.find_one({'$or': [{'email': email}, {'username': username}]}):
+                existing_user = db.users.find_one({'$or': [{'email': email}, {'username': username}]})
+                if existing_user.get('username') == username:
+                     return Response({'error': 'Username already taken'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
-        db.users.insert_one(new_user)
-        
-        # Determine redirect/payload
-        return Response({'message': 'User created successfully', 'user': {'email': email, 'username': username, 'role': role, 'id': user_id}}, status=status.HTTP_201_CREATED)
+            # Hash password
+            hashed_password = pbkdf2_sha256.hash(password)
+
+            user_id = str(uuid.uuid4())
+            new_user = {
+                'id': user_id,
+                'email': email,
+                'username': username, # Store username
+                'password': hashed_password, # Store hash!
+                'name': name,
+                'role': role,
+                'created_at': datetime.datetime.utcnow()
+            }
+
+            db.users.insert_one(new_user)
+            print("User inserted successfully")
+            
+            # Determine redirect/payload
+            return Response({'message': 'User created successfully', 'user': {'email': email, 'username': username, 'role': role, 'id': user_id}}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class LoginView(APIView):
     authentication_classes = [] # Disable CSRF check

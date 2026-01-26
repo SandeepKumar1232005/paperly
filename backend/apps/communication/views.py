@@ -5,25 +5,16 @@ from .models import Message, Announcement
 from .serializers import MessageSerializer, AnnouncementSerializer
 from django.db.models import Q
 
-class MessageViewSet(viewsets.ModelViewSet):
-    serializer_class = MessageSerializer
-    permission_classes = [permissions.AllowAny] # Ideally IsAuthenticated
+class MessageViewSet(viewsets.ViewSet):
+    def list(self, request): return Response([])
+    def create(self, request): return Response({})
+    def retrieve(self, request, pk=None): return Response({})
+    def update(self, request, pk=None): return Response({})
+    def destroy(self, request, pk=None): return Response({})
 
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_anonymous:
-            return Message.objects.none()
-        return Message.objects.filter(Q(sender=user) | Q(recipient=user))
-
-class AnnouncementViewSet(viewsets.ModelViewSet):
-    queryset = Announcement.objects.all().order_by('-created_at')
-    serializer_class = AnnouncementSerializer
-    permission_classes = [permissions.AllowAny]
-
-    def perform_create(self, serializer):
-        # serializer.save(created_by=self.request.user)
-        # Mock user for now if unauth
-        if self.request.user.is_authenticated:
-            serializer.save(created_by=self.request.user)
-        else:
-            serializer.save()
+class AnnouncementViewSet(viewsets.ViewSet):
+    def list(self, request): return Response([])
+    def create(self, request): return Response({})
+    def retrieve(self, request, pk=None): return Response({})
+    def update(self, request, pk=None): return Response({})
+    def destroy(self, request, pk=None): return Response({})
