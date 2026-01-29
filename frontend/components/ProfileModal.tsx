@@ -31,8 +31,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ user, onClose, onSave }) =>
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSave = () => {
     onSave({ name, avatar, address });
     onClose();
   };
@@ -45,7 +44,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ user, onClose, onSave }) =>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-3xl">&times;</button>
         </div>
 
-        <form onSubmit={handleSave} className="flex flex-col overflow-hidden h-full">
+        <div className="flex flex-col overflow-hidden h-full">
           <div className="p-8 overflow-y-auto">
             <div className="flex flex-col items-center mb-8">
               <div className="relative group">
@@ -143,14 +142,15 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ user, onClose, onSave }) =>
               Cancel
             </button>
             <button
-              type="submit"
+              type="button"
+              onClick={handleSave}
               disabled={isUploading}
               className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 disabled:opacity-50"
             >
               Save Changes
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

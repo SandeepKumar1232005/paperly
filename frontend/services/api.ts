@@ -320,9 +320,57 @@ export const api = {
 
   async updateUserById(id: string, updates: Partial<User>): Promise<User> {
     const start = Date.now();
-    await delay(600);
+    await delay(300);
 
-    // Mock persistent update
+    // Try backend update
+    try {
+      const token = localStorage.getItem('auth_token');
+      if (!token) throw new Error("No auth token");
+
+      const response = await fetch('http://localhost:8000/api/auth/user/', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updates)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        await logger('PATCH', `/users/${id}`, start);
+
+        // Update local mock DB to stay in sync
+        const users = db.getUsers();
+        const idx = users.findIndex(u => u.id === id);
+        if (idx !== -1) {
+          // Merge backend data with local data format
+          const roleMap: Record<string, 'STUDENT' | 'WRITER' | 'ADMIN'> = {
+            'student': 'STUDENT',
+            'provider': 'WRITER',
+            'admin': 'ADMIN'
+          };
+
+          const backendUser = {
+            ...users[idx],
+            ...updates,
+            name: data.name,
+            email: data.email,
+            avatar: data.avatar || users[idx].avatar,
+            role: roleMap[data.role] || users[idx].role,
+            username: data.username,
+            address: data.address
+          };
+          users[idx] = backendUser;
+          db.saveUsers(users);
+          return backendUser;
+        }
+      }
+    } catch (e) {
+      console.warn("Backend update failed, falling back to local only", e);
+    }
+
+    // Mock persistent update (Fallback)
     const users = db.getUsers();
     const idx = users.findIndex(u => u.id === id);
     if (idx !== -1) {
@@ -330,7 +378,7 @@ export const api = {
       db.saveUsers(users);
     }
 
-    await logger('PATCH', `/ users / ${id} `, start);
+    await logger('PATCH', `/users/${id}`, start);
     return users[idx];
   },
 

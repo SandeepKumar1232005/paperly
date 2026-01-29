@@ -27,7 +27,7 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, assignments, 
   const [paymentAssignment, setPaymentAssignment] = useState<Assignment | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [newAsgn, setNewAsgn] = useState({ title: '', subject: '', budget: 50, deadline: '', description: '' });
+  const [newAsgn, setNewAsgn] = useState({ title: '', subject: '', budget: 50, deadline: '', description: '', pages: 1 });
 
   const [suggestedPrice, setSuggestedPrice] = useState<number | null>(null);
 
@@ -40,10 +40,10 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, assignments, 
   // Smart Pricing Effect
   React.useEffect(() => {
     if (newAsgn.subject && newAsgn.deadline) {
-      const price = calculateSuggestedPrice(newAsgn.subject, newAsgn.deadline);
+      const price = calculateSuggestedPrice(newAsgn.subject, newAsgn.deadline, newAsgn.pages);
       setSuggestedPrice(price);
     }
-  }, [newAsgn.subject, newAsgn.deadline]);
+  }, [newAsgn.subject, newAsgn.deadline, newAsgn.pages]);
 
   // Recommendation logic
   const recommendedWriters = useMemo(() => {
@@ -54,9 +54,9 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, assignments, 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onCreateAssignment(newAsgn, selectedFile || undefined);
+    onCreateAssignment({ ...newAsgn, pages: newAsgn.pages }, selectedFile || undefined);
     setShowCreateModal(false);
-    setNewAsgn({ title: '', subject: '', budget: 50, deadline: '', description: '' });
+    setNewAsgn({ title: '', subject: '', budget: 50, deadline: '', description: '', pages: 1 });
     setSelectedFile(null);
   };
 
@@ -151,7 +151,10 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, assignments, 
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{asgn.subject}</td>
                   <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{new Date(asgn.deadline).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 text-sm font-medium text-slate-800 dark:text-slate-200">{asgn.budget > 0 ? `₹${asgn.budget}` : 'Pending Quote'}</td>
+                  <td className="px-6 py-4 text-sm font-medium text-slate-800 dark:text-slate-200">
+                    {asgn.budget > 0 ? `₹${asgn.budget}` : 'Pending Quote'}
+                    {asgn.pages && <span className="block text-[10px] text-slate-400 font-normal">{asgn.pages} pgs</span>}
+                  </td>
                   <td className="px-6 py-4 min-w-[200px]">
                     <div className="space-y-2">
                       <StatusBadge status={asgn.status} />
@@ -327,25 +330,36 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, assignments, 
                 />
               </div>
 
-              {/* Smart Pricing Display */}
-              {suggestedPrice && (
-                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-3 rounded-lg border border-indigo-100 dark:border-indigo-800 flex items-center justify-between mb-2 animate-in fade-in">
-                  <div className="flex items-center gap-2">
-                    <Sparkles size={16} className="text-indigo-600 dark:text-indigo-400" />
-                    <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300">Smart Price Suggestion</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-slate-800 dark:text-white">₹{suggestedPrice}</span>
-                    <button
-                      type="button"
-                      onClick={() => setNewAsgn({ ...newAsgn, budget: suggestedPrice })}
-                      className="text-xs bg-white dark:bg-slate-800 px-2 py-1 rounded border shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-                    >
-                      Apply
-                    </button>
-                  </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Number of Pages</label>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setNewAsgn(prev => ({ ...prev, pages: Math.max(1, prev.pages - 1) }))}
+                    className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
+                  </button>
+                  <input
+                    type="number"
+                    min="1"
+                    required
+                    value={newAsgn.pages}
+                    onChange={e => setNewAsgn({ ...newAsgn, pages: parseInt(e.target.value) || 1 })}
+                    className="w-20 text-center px-2 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setNewAsgn(prev => ({ ...prev, pages: prev.pages + 1 }))}
+                    className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                  </button>
+                  <span className="text-sm text-slate-500 ml-2">({newAsgn.pages * 250} words approx)</span>
                 </div>
-              )}
+              </div>
+
+
 
               {recommendedWriters.length > 0 && (
                 <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 animate-in fade-in slide-in-from-top-2">
@@ -383,6 +397,26 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, assignments, 
                   placeholder="Detail your requirements here..."
                 />
               </div>
+
+              {/* Smart Pricing Display */}
+              {suggestedPrice && (
+                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-3 rounded-lg border border-indigo-100 dark:border-indigo-800 flex items-center justify-between mb-2 animate-in fade-in">
+                  <div className="flex items-center gap-2">
+                    <Sparkles size={16} className="text-indigo-600 dark:text-indigo-400" />
+                    <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300">Smart Price Suggestion</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-slate-800 dark:text-white">₹{suggestedPrice}</span>
+                    <button
+                      type="button"
+                      onClick={() => setNewAsgn({ ...newAsgn, budget: suggestedPrice })}
+                      className="text-xs bg-white dark:bg-slate-800 px-2 py-1 rounded border shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* File Attachment Input */}
               <div>
@@ -450,6 +484,10 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, assignments, 
                   <div className="p-3 bg-slate-50 rounded-lg">
                     <p className="text-xs font-medium text-slate-500 uppercase">Budget</p>
                     <p className="font-semibold text-slate-900">₹{viewingAssignment.budget}</p>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-lg">
+                    <p className="text-xs font-medium text-slate-500 uppercase">Pages</p>
+                    <p className="font-semibold text-slate-900">{viewingAssignment.pages || 'N/A'}</p>
                   </div>
                   <div className="p-3 bg-slate-50 rounded-lg">
                     <p className="text-xs font-medium text-slate-500 uppercase">Deadline</p>

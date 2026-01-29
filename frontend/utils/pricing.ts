@@ -1,4 +1,4 @@
-export const calculateSuggestedPrice = (subject: string, deadline: string, baseRate = 10): number => {
+export const calculateSuggestedPrice = (subject: string, deadline: string, pages: number = 1, baseRate = 10): number => {
     const now = new Date();
     const dead = new Date(deadline);
 
@@ -30,8 +30,8 @@ export const calculateSuggestedPrice = (subject: string, deadline: string, baseR
         ? complexityMap[Object.keys(complexityMap).find(k => subjectLower.includes(k))!]
         : 1.0;
 
-    // Assume standard page count of ~5 for MVP calculator if not specified, 
-    // or just return a base "Project Price"
+    // pages defaults to 1 if not provided, though UI should provide it
+    const pageCount = pages > 0 ? pages : 1;
 
-    return Math.round(baseRate * 5 * multiplier * subjectMultiplier);
+    return Math.round(baseRate * pageCount * multiplier * subjectMultiplier);
 };

@@ -68,7 +68,7 @@ const Login: React.FC<LoginProps> = ({ onLogin, onSocialLoginSuccess, onNavigate
             <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Sign in to Paperly</p>
           </div>
 
-{/* 
+          {/* 
           <div className="space-y-3 mb-6">
             <button
               onClick={() => loginWithGoogle()}
@@ -98,14 +98,14 @@ const Login: React.FC<LoginProps> = ({ onLogin, onSocialLoginSuccess, onNavigate
           <form onSubmit={handleStandardSubmit} className="space-y-5">
             {error && <div className="bg-red-50 text-red-600 p-3 rounded-xl text-xs font-medium border border-red-100">{error}</div>}
             <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Email Address</label>
+              <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Email Address or Username</label>
               <input
-                type="email"
+                type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors"
-                placeholder="alice@student.com"
+                placeholder="alice@student.com or alice123"
               />
             </div>
             <div>

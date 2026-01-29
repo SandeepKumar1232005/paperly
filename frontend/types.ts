@@ -52,6 +52,7 @@ export interface Assignment {
   provider?: User; // New - to match backend structure if needed
   rejectedBy?: string[]; // New - IDs of writers who rejected this
   attachment?: string | null; // New - URL/Path to attached file
+  pages?: number; // New - Number of pages
 }
 
 export interface Transaction {

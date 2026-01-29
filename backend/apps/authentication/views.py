@@ -70,10 +70,20 @@ class LoginView(APIView):
     permission_classes = []
 
     def post(self, request):
-        email = request.data.get('email')
+        identifier = request.data.get('email') # Frontend still sends 'email' state, but it can be username
         password = request.data.get('password')
 
-        user = db.users.find_one({'email': email})
+        if not identifier or not password:
+             return Response({'error': 'Please provide both username/email and password'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Find by email OR username
+        user = db.users.find_one({
+            '$or': [
+                {'email': identifier},
+                {'username': identifier}
+            ]
+        })
+
         if not user:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -98,4 +108,80 @@ class LoginView(APIView):
                 'name': user.get('name'),
                 'role': user.get('role')
             }
+        })
+
+class UserDetailsView(APIView):
+    # Retrieve and Update user details
+    # Expects Authorization: Bearer <token> (or Token ?)
+    # My simple implementation in api.ts uses 'Bearer' or 'Token'.
+    # I need a custom authentication class or manually decode token here because I disabled global auth classes?
+    # Ideally I should use a permission class, but since I am using manual JWT encoding in LoginView...
+    # I need to duplicate the verify logic or use a middleware/DRF auth.
+    # For speed/simplicity in this "Do it yourself" backend, I'll verifying token in the view.
+    
+    authentication_classes = [] 
+    permission_classes = []
+
+    def get_user_from_token(self, request):
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return None
+        
+        try:
+            # "Bearer <token>" or "Token <token>"
+            token = auth_header.split(' ')[1]
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            user_id = payload.get('user_id')
+            user = db.users.find_one({'id': user_id})
+            return user
+        except Exception as e:
+            print("Token Error:", e)
+            return None
+
+    def get(self, request):
+        user = self.get_user_from_token(request)
+        if not user:
+             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        return Response({
+            'id': user['id'],
+            'username': user.get('username'),
+            'email': user['email'],
+            'first_name': user.get('name', '').split(' ')[0], # Adapter for frontend expecting first_name
+            'last_name': ' '.join(user.get('name', '').split(' ')[1:]),
+            'name': user.get('name'),
+            'role': user.get('role'),
+            'avatar': user.get('avatar'),
+            'address': user.get('address'),
+            'is_verified': user.get('is_verified', False)
+        })
+
+    def patch(self, request):
+        user = self.get_user_from_token(request)
+        if not user:
+             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        updates = request.data
+        valid_updates = {}
+        
+        # Whitelist fields
+        if 'name' in updates: valid_updates['name'] = updates['name']
+        if 'address' in updates: valid_updates['address'] = updates['address']
+        if 'avatar' in updates: valid_updates['avatar'] = updates['avatar']
+        
+        if valid_updates:
+            db.users.update_one({'id': user['id']}, {'$set': valid_updates})
+            
+        # Return updated user
+        updated_user = db.users.find_one({'id': user['id']})
+        
+        return Response({
+            'id': updated_user['id'],
+            'username': updated_user.get('username'),
+            'email': updated_user['email'],
+             'name': updated_user.get('name'),
+            'role': updated_user.get('role'),
+            'avatar': updated_user.get('avatar'),
+            'address': updated_user.get('address'),
+            'is_verified': updated_user.get('is_verified', False)
         })
